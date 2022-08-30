@@ -6,6 +6,9 @@ import Button from "@mui/material/Button";
 import styled from "styled-components";
 import { ITodo, TodoFilterType } from "./types";
 import { useLocalState } from "./hooks/useLocalState";
+import { DropResult,OnDragEndResponder } from "react-beautiful-dnd";
+
+
 
 const TodoAppContainer = styled.div`
   width: 600px;
@@ -52,12 +55,26 @@ const App: React.FC = () => {
     });
   };
 
+  const DragEnd = (result: any) => {
+		const { source, destination } = result
+		if (!destination) return
+
+		const items = Array.from(todos)
+		const [ newOrder ] = items.splice(source.index, 1)
+		items.splice(destination.index, 0, newOrder)
+
+    setTodos(items)
+	}
+
+
+ 
+
   return (
     <TodoAppContainer>
       <TodoForm onAdd={addNewTask} />
       <TodoFilter onButtonClick={setFilterType} active={filterType} />
-      <Todo list={filterTodosFunction()} onChangeStatus={changeStatus} />
-      <Button variant="contained" onClick={clearCompleted}>
+        <Todo onDragEnd={DragEnd} list={filterTodosFunction()} onChangeStatus={changeStatus} />
+        <Button variant="contained" onClick={clearCompleted}>
         Clear completed
       </Button>
     </TodoAppContainer>

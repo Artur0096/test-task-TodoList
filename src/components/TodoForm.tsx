@@ -25,7 +25,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onAdd }) => {
     if (!input) {
       return;
     }
-    onAdd({ text: input, isDone: false });
+    onAdd({id: Math.floor(Math.random() *100), text: input, isDone: false });
     setInput("");
   };
 
